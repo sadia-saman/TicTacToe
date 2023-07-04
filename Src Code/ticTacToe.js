@@ -127,5 +127,23 @@ function putValueToBox(boxIndex) {
 		flag = 1;
 	}
 }
+computerTurn = false;
+function easyMode(boxIndex){
+    if (computerTurn) {
+        boxIndex = Math.floor(Math.random() * 9);
+		document.getElementById(boxIndex).value = "X";
+		document.getElementById(boxIndex).disabled = true;
+		computerTurn = false;
+	}
+	else { 
+		document.getElementById(boxIndex).value = "O";
+		document.getElementById(boxIndex).disabled = true;
+		computerTurn = true;
+	}
+}
+
+function mediumMode(){
+
+}
 
  
