@@ -1,80 +1,70 @@
-// Function called whenever user tab on any box
-function myfunc() {
- 
-    var box = ["b1", "b2", "b3", "b4", "b5", "b6", "b7","b8","b9"]
-    var boxValue = [];
- 
-    for (var i = 0; i < box.length; i++) {
-        boxValue[i] = document.getElementById(box[i]).value;
-    }
+//declare constants
+const ComputerMove = 'X';
+const HumanMove = 'O';
 
-    for (var i = 0; i < box.length; i++) {
-        box[i] = document.getElementById(box[i]);
-    }
-    function disableBox(){
-        for(b of box){
-            b.disabled = true;
-        }
+const board = ["b1", "b2", "b3", "b4", "b5", "b6", "b7","b8","b9"]
+ComputerTurn = false;
+HumanTurn = true;
+boxValues = [];
+boxBtns = [];
+
+
+function checkTie(){ 
+    for(box of board){
+        if(document.getElementById(box).value == '') return false; 
     } 
-    function changeColor(indices){
-        for(i of indices){
-            box[i].style.color = "red";
-        }
-    }  
-    function checkTie(){
-        for(b of box){
-            if(b.value == ''){
-                return false;
-            }
-        }
-        return true;
+    disableBoard();
+    document.getElementById('print').innerHTML = "Match Tied";
+    return true;
+}
+
+
+function disableBoard(){
+    for(box of board){
+        box.disabled = true;
     }
-	if (isWinner(boxValue,[0,1,2])) { 
-		disableBox();
-        changeColor([0,1,2]);
-	}
-	else if (isWinner(boxValue,[0,3,6])) { 
-		disableBox();
-        changeColor([0,3,6]);
-	}
-	else if (isWinner(boxValue,[6,7,8])) { 
-		disableBox();
-        changeColor([6,7,8]);
-	}
-	else if (isWinner(boxValue,[2,5,8])) { 
-        disableBox();
-        changeColor([2,5,8]);
-	}
-	else if (isWinner(boxValue,[0,4,8])) {        
-        disableBox();
-        changeColor([0,4,8]);
-	}
-	else if (isWinner(boxValue,[2,4,6])) { 
-        disableBox();
-        changeColor([2,4,6]);
-	}
-	else if (isWinner(boxValue,[1,4,7])) { 
-        disableBox();
-        changeColor([1,4,7]);
-	}
-	else if (isWinner(boxValue,[3,4,5])) { 
-        disableBox();
-        changeColor([3,4,5]);
-	} 
-	else if (checkTie()) {
-		document.getElementById('print')
-			.innerHTML = "Match Tie";
-	}
-	else {  
-		if (flag == 1) {
-			document.getElementById('print')
-				.innerHTML = "Player X Turn";
-		}
-		else {
-			document.getElementById('print')
-				.innerHTML = "Player O Turn";
-		}
-	}
+} 
+function changeColor(indices){
+    for(i of indices){
+        board[i].style.color = "red";
+    }
+}
+
+
+function disableBoard(){
+    for(let i =0;i<9;i++){
+        boxBtns[i].disabled = true;
+    }
+} 
+function changeColor(indices){
+    for(i of indices){
+        boxBtns[i].style.color = "red";
+    }
+} 
+function checkForWin(){
+    var winningCombination = [ [0,1,2], [3,4,5], [6,7,8], [0,4,8], [2,4,6], [0,3,6], [2,5,8], [1,4,7]];
+    let i = 0;
+    for(box of board){
+        if(document.getElementById(box).value == '') boxValues[i++] = '_';
+        else boxValues[i++] = document.getElementById(box).value;
+    } 
+    console.log(boxValues);
+    for(let i = 0; i < winningCombination.length; i++){
+         if(isWinner(boxValues, winningCombination[i])){
+            disableBoard();
+            changeColor(winningCombination[i]);
+            return true;
+         }
+    }
+    
+    return false;
+}
+
+// Function called whenever user tab on any box
+function myfunc() { 
+    for(let i=0;i<9;i++){
+        boxBtns[i] = document.getElementById(board[i]);
+    }
 }
 
 
@@ -87,20 +77,19 @@ function isWinner(boxValues, indices){
             break;
         }
     }
-    var O_wins = true;
-    if(!X_wins){
-        for(index of indices){
-            if(boxValues[index] != 'O'){
-                O_wins = false;
-                break;
-            }
-        }
-    }
     if(X_wins){
         document.getElementById('print').innerHTML = "Player X won";
         return true;
     }
-    else if(O_wins){
+    var O_wins = true;
+    for(index of indices){
+        if(boxValues[index] != 'O'){
+            O_wins = false;
+            break;
+        }
+    }
+    
+    if(O_wins){
         document.getElementById('print').innerHTML = "Player O won";
         return true;
     }else{
@@ -114,35 +103,52 @@ function ResetGame() {
 	location.reload(); 
 }
  
-flag = 1;
-function putValueToBox(boxIndex) {
-	if (flag == 1) {
-		document.getElementById(boxIndex).value = "X";
-		document.getElementById(boxIndex).disabled = true;
-		flag = 0;
-	}
-	else {
-		document.getElementById(boxIndex).value = "O";
-		document.getElementById(boxIndex).disabled = true;
-		flag = 1;
-	}
-}
 computerTurn = false;
 function easyMode(boxIndex){
-    if (computerTurn) {
-        boxIndex = Math.floor(Math.random() * 9);
-		document.getElementById(boxIndex).value = "X";
-		document.getElementById(boxIndex).disabled = true;
-		computerTurn = false;
-	}
-	else { 
-		document.getElementById(boxIndex).value = "O";
-		document.getElementById(boxIndex).disabled = true;
-		computerTurn = true;
-	}
+    console.log("easy mode " + boxIndex);
+    document.getElementById(boxIndex).value = "O";
+	document.getElementById(boxIndex).disabled = true;
+    if(checkForWin() || checkTie()) return;
+ 
+    let availableBoxes = [];
+    for(let i = 0; i < 9; i++){
+        if(document.getElementById(board[i]).value == ''){
+            availableBoxes.push(board[i]);
+        }
+    } 
+
+    console.log("available boxes : "+availableBoxes.length)
+    boxIndex = availableBoxes[Math.floor(Math.random() * availableBoxes.length)]; 
+    console.log("random box selected : "+ boxIndex);
+    document.getElementById(boxIndex).value = "X";
+    document.getElementById(boxIndex).disabled = true; 
+    console.log("computer turn : "+computerTurn);
+    if(checkForWin() || checkTie()) return;
+}
+
+function bestMoveForMediumMode(){
+    let bestMove = -Infinity;
+    let chosenBox;
+    for(let i=0;i<9;i++){
+        if(document.getElementById(board[i]).value == ''){ 
+            board[i] = 'X'  ;        
+            let score = minimax(board,computerTurn, ); 
+            board[i]='';
+            if(score > bestMove){
+                bestMove = score;
+                chosenBox = b;
+            }
+        }
+    }
+    return chosenBox;
 }
 
 function mediumMode(){
+
+}
+
+
+function minimax(boxes, ){
 
 }
 
