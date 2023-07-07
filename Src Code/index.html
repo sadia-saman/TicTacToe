@@ -10,58 +10,65 @@
 	<script src="ticTacToe.js"></script>
 </head>
 
-<body>
-	<div id="main">
-		<h1>TIC TAC TOE</h1>
+<body class="body">
+	<div id="main" class="main">
+		<h1 >TIC TAC TOE</h1>
 		<p id="ins">
-			Game starts by just Tap on
-			box<br><br>Human Player is Marked as
+			Human Player is Marked as
 			<b>Player X </b>And Computer's move is marked as
-			<b>Player 0</b>
+			<b>Player O</b>
 		</p>
 		<br><br>
 		<div class = "ui">
 			<div class="row">
 				<input type="text" id= "b1"
-					class="cell" onclick="easyMode('b1'); myfunc();"
+					class="cell" onclick="myfunc(); getMove('b1');"
 					readonly>
 				<input type="text" id= "b2"
-					class="cell" onclick="easyMode('b2'); myfunc();"
+					class="cell" onclick="myfunc(); getMove('b2');"
 					readonly>
 				<input type="text" id= "b3" class="cell"
-					onclick="easyMode('b3'); myfunc();"
+					onclick="myfunc(); getMove('b3');"
 					readonly>
 			</div>
 			<div class="row">
 				<input type="text" id= "b4"
-					class="cell" onclick="easyMode('b4'); myfunc();"
+					class="cell" onclick="myfunc(); getMove('b4');"
 					readonly>
 				<input type="text" id= "b5"
-					class="cell" onclick="easyMode('b5'); myfunc();"
+					class="cell" onclick="myfunc(); getMove('b5');"
 					readonly>
 				<input type="text" id= "b6"
-					class="cell" onclick="easyMode('b6'); myfunc();"
+					class="cell" onclick="myfunc(); getMove('b6');"
 					readonly>
 			</div>
 			<div class="row">
 				<input type="text" id= "b7"
-					class="cell" onclick="easyMode('b7'); myfunc();"
+					class="cell" onclick="myfunc(); getMove('b7');"
 					readonly>
 				<input type="text" id= "b8"
-					class="cell" onclick="easyMode('b8');myfunc();"
+					class="cell" onclick="myfunc(); getMove('b8');"
 					readonly>
 				<input type="text" id= "b9"
-					class="cell" onclick="easyMode('b9');myfunc();"
+					class="cell" onclick="myfunc(); getMove('b9');"
 					readonly>
 			</div>
 		</div>
 		<br><br><br>
-		
-		<button id="but" onclick="ResetGame()">
-			RESET
-		</button>
-		<br><br>
-		<p id="print"></p>
+		<p id="printTurn"></p>
+        <br><br>
+		<span class="btns">
+            <button id="but" onclick="setEasyMode();">
+                Easy
+            </button>
+            <button id="but" onclick="setMediumMode();">
+                Hard
+            </button>
+            <button id="but" onclick="ResetGame();">
+                RESET
+            </button>
+        </span> 
+		<p id="mode"></p>
 	</div>
 </body>
 
